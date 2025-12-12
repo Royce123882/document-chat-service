@@ -1,0 +1,65 @@
+/* Chat form styles */
+
+.chat-input-form {
+  display: flex;
+  gap: 1rem;
+  padding: 1.5rem 2rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  background: white;
+}
+
+.chat-input {
+  flex: 1;
+  padding: 1rem 1.25rem;
+  border: 2px solid rgba(0, 0, 0, 0.08);
+  border-radius: 28px;
+  font-size: 0.95rem;
+  outline: none;
+  transition: all 0.2s;
+  background: #fafbfc;
+}
+
+.chat-input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4px rgba(0, 102, 204, 0.1);
+  background: white;
+}
+
+.chat-input:disabled {
+  background-color: var(--bg-light);
+  cursor: not-allowed;
+}
+
+.send-button {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary-color), #0052a3);
+  color: white;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.send-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #0052a3, #003d7a);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 102, 204, 0.3);
+}
+
+.send-button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .chat-input-form {
+    padding: 1rem;
+  }
+}

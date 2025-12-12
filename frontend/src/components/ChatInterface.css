@@ -1,0 +1,43 @@
+/**
+ * ChatInterface main container styles.
+ *
+ * Most styles have been extracted to child components:
+ * - ChatHeader.css (header styles)
+ * - MessageList.css (message container styles)
+ * - Message.css (message bubble styles)
+ * - ChunkDisplay.css (chunk display styles)
+ * - ChatForm.css (input form styles)
+ */
+
+/* Main chat container layout */
+.chat-interface {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 300px);
+  min-height: 600px;
+  background: var(--bg-white);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+/* Error banner (shared across components) */
+.chat-error {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background-color: #fee;
+  border-top: 1px solid var(--danger-color);
+  color: var(--danger-color);
+  font-size: 0.875rem;
+}
+
+/* Responsive layout adjustments */
+@media (max-width: 768px) {
+  .chat-interface {
+    height: calc(100vh - 250px);
+    min-height: 500px;
+  }
+}

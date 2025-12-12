@@ -1,0 +1,137 @@
+/* Message styles */
+
+.message {
+  margin-bottom: 2rem;
+}
+
+.message-content {
+  line-height: 1.6;
+}
+
+/* System messages */
+.system-message {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.875rem 1.125rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  width: fit-content;
+  margin: 0 auto;
+  background-color: #e3f2fd;
+  color: #1565c0;
+  border: 1px solid #bbdefb;
+  box-shadow: 0 1px 3px rgba(21, 101, 192, 0.08);
+}
+
+/* User messages */
+.message-user .message-bubble {
+  margin-left: auto;
+  flex-direction: row-reverse;
+  width: fit-content;
+}
+
+.message-bubble {
+  display: flex;
+  gap: 0.75rem;
+  max-width: 80%;
+  align-items: flex-start;
+}
+
+.user-bubble {
+  background: linear-gradient(135deg, var(--primary-color), #0052a3);
+  color: white;
+  border-radius: 20px 20px 4px 20px;
+  padding: 1rem 1.25rem;
+  box-shadow: 0 4px 12px rgba(0, 102, 204, 0.2);
+}
+
+.user-time {
+  text-align: right;
+  margin-left: auto;
+  width: fit-content;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  opacity: 0.7;
+  margin-top: 0.25rem;
+}
+
+/* Assistant messages */
+.assistant-bubble {
+  background: white;
+  color: var(--text-primary);
+  border-radius: 20px 20px 20px 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.message-content-wrapper {
+  flex: 1;
+  padding: 1rem 1.25rem;
+}
+
+.assistant-time {
+  text-align: left;
+  margin-right: auto;
+  width: fit-content;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  opacity: 0.7;
+  margin-top: 0.25rem;
+}
+
+/* Error messages */
+.error-message {
+  background: rgba(255, 100, 100, 0.1);
+  border: 1px solid rgba(255, 100, 100, 0.3);
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: rgba(255, 100, 100, 0.9);
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Typing indicator */
+.typing-indicator {
+  display: flex;
+  gap: 4px;
+  padding: 1rem;
+}
+
+.typing-indicator span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--text-secondary);
+  animation: typing 1.4s infinite;
+}
+
+.typing-indicator span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.typing-indicator span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes typing {
+  0%,
+  60%,
+  100% {
+    opacity: 0.3;
+    transform: translateY(0);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(-8px);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .message-bubble {
+    max-width: 85%;
+  }
+}

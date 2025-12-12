@@ -1,0 +1,55 @@
+/* Layout scaffold for the full app */
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Hero header that anchors the branding */
+.app-header {
+  background: linear-gradient(135deg, var(--primary-color), #0052a3);
+  color: white;
+  padding: 2.25rem 2rem;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.app-header h1 {
+  font-size: 2.25rem;
+  margin-bottom: 0.625rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.app-header p {
+  font-size: 1.0625rem;
+  opacity: 0.95;
+  line-height: 1.5;
+}
+
+/* Page content container */
+.app-main {
+  flex: 1;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+@media (max-width: 768px) {
+  .app-header {
+    padding: 1.75rem 1.5rem;
+  }
+
+  .app-header h1 {
+    font-size: 1.75rem;
+  }
+
+  .app-header p {
+    font-size: 0.9375rem;
+  }
+
+  .app-main {
+    padding: 1.5rem 1rem;
+  }
+}
