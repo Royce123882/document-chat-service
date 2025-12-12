@@ -12,8 +12,6 @@ requests to the appropriate backend (OpenAI, Azure OpenAI, etc.) based on
 the model configuration in SAP AI Core.
 """
 
-import json
-import os
 from typing import Any, Dict
 
 from app.utils.logger import get_logger, log_service_call
@@ -27,41 +25,20 @@ from langchain_core.language_models.chat_models import BaseChatModel
 logger = get_logger(__name__)
 
 
-def init_proxy_client(genai_platform_credentials: Dict = None) -> Any:
+def init_proxy_client(genai_hub_credentials: Dict) -> Any:
     """Initialize a proxy client for API requests.
 
-    The helper prefers credentials passed in by the caller so production
-    deployments can read secrets from environment variables/secret stores. When
-    omitted, we fall back to ``app/secrets/genai-credentials.json`` which is
-    meant strictly for local development and is git-ignored.
-
     Args:
-        genai_platform_credentials: Optional credentials dict. If not provided,
-            loads from ``app/secrets/genai-credentials.json`` relative to this
-            module.
+        genai_hub_credentials: Credentials dict loaded from environment variables.
+            Must contain: clientid, clientsecret, url, and serviceurls.AI_API_URL
 
     Returns:
         A proxy client configured with authentication and base URLs.
     """
-    if genai_platform_credentials is None:
-        # Load credentials from file
-        script_dir = os.path.dirname(os.path.abspath(__file__))
-        credentials_path = os.path.join(script_dir, "..", "secrets", "genai-credentials.json")
-
-        if not os.path.exists(credentials_path):
-            raise FileNotFoundError(
-                "GenAI credentials not provided and app/secrets/genai-credentials.json"
-                " was not found. Supply genai_platform_credentials explicitly"
-                " when running outside local development."
-            )
-
-        with open(credentials_path, 'r') as f:
-            genai_platform_credentials = json.load(f)
-
-    client_id = genai_platform_credentials["clientid"]
-    client_secret = genai_platform_credentials["clientsecret"]
-    auth_url = f"{genai_platform_credentials['url']}/oauth/token"
-    base_url = f"{genai_platform_credentials['serviceurls']['AI_API_URL']}/v2"
+    client_id = genai_hub_credentials["clientid"]
+    client_secret = genai_hub_credentials["clientsecret"]
+    auth_url = f"{genai_hub_credentials['url']}/oauth/token"
+    base_url = f"{genai_hub_credentials['serviceurls']['AI_API_URL']}/v2"
 
     proxy_client = get_proxy_client(
         proxy_version="gen-ai-hub",
@@ -84,9 +61,9 @@ def init_proxy_client(genai_platform_credentials: Dict = None) -> Any:
 
 def init_llm_model(
     model: str,
+    genai_hub_credentials: Dict,
     temperature: float = 0.0,
-    max_tokens: int = 3000,
-    genai_platform_credentials: Dict = None
+    max_tokens: int = 3000
 ) -> BaseChatModel:
     """
     Initialize a language model from SAP GenAI Hub.
@@ -96,25 +73,26 @@ def init_llm_model(
 
     Args:
         model: Model identifier (e.g., "gpt-4o", "gpt-4", "gpt-3.5-turbo")
+        genai_hub_credentials: Credentials dict loaded from environment variables.
+            Must contain: clientid, clientsecret, url, and serviceurls.AI_API_URL
         temperature: Controls randomness in responses:
             - 0.0 = deterministic (same input -> same output)
             - 1.0 = balanced creativity
             - 2.0 = maximum randomness
         max_tokens: Maximum tokens in the model's response
-        genai_platform_credentials: Optional credentials dict. If not provided,
-            loads from app/secrets/genai-credentials.json
 
     Returns:
         Initialized LangChain chat model ready for use
 
     Example:
         ```python3
-        llm = init_llm_model("gpt-4o", temperature=0.7, max_tokens=1000)
+        credentials = {...}  # Load from .env
+        llm = init_llm_model("gpt-4o", credentials, temperature=0.7, max_tokens=1000)
         response = llm.invoke("What is the capital of France?")
         print(response.content)
         ```
     """
-    proxy_client = init_proxy_client(genai_platform_credentials)
+    proxy_client = init_proxy_client(genai_hub_credentials)
 
     llm = init_llm(
         model,
@@ -134,7 +112,7 @@ def init_llm_model(
     return llm
 
 
-def init_embedding_model(embeddings_model: str, genai_platform_credentials: Dict = None):
+def init_embedding_model(embeddings_model: str, genai_hub_credentials: Dict):
     """
     Initialize an embeddings model from SAP GenAI Hub.
 
@@ -144,8 +122,8 @@ def init_embedding_model(embeddings_model: str, genai_platform_credentials: Dict
     Args:
         embeddings_model: Model identifier (e.g., "text-embedding-ada-002",
             "text-embedding-3-small", "text-embedding-3-large")
-        genai_platform_credentials: Optional credentials dict. If not provided,
-            loads from app/secrets/genai-credentials.json
+        genai_hub_credentials: Credentials dict loaded from environment variables.
+            Must contain: clientid, clientsecret, url, and serviceurls.AI_API_URL
 
     Returns:
         Initialized LangChain embeddings model
@@ -156,7 +134,7 @@ def init_embedding_model(embeddings_model: str, genai_platform_credentials: Dict
         vectors = embeddings.embed_documents(["Hello world", "Goodbye world"])
         ```
     """
-    proxy_client = init_proxy_client(genai_platform_credentials)
+    proxy_client = init_proxy_client(genai_hub_credentials)
 
     embeddings = init_embedding_model_genai_hub(
         embeddings_model,

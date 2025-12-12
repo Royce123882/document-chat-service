@@ -76,7 +76,7 @@ class DocumentChatService:
         }
 
         # Store credentials for creating LLM instances on demand
-        self.genai_credentials = {
+        self.genai_hub_credentials = {
             "clientid": self.client_id,
             "clientsecret": self.client_secret,
             "url": self.auth_url.replace("/oauth/token", ""),
@@ -328,9 +328,9 @@ class DocumentChatService:
                     # Create LLM instance with user-specified parameters
                     llm = init_llm_model(
                         model=llm_model,
+                        genai_hub_credentials=self.genai_hub_credentials,
                         temperature=llm_temperature,
-                        max_tokens=llm_max_tokens,
-                        genai_platform_credentials=self.genai_credentials
+                        max_tokens=llm_max_tokens
                     )
                     llm_response = llm.invoke(prompt)
                     response_text = llm_response.content if hasattr(llm_response, 'content') else str(llm_response)
